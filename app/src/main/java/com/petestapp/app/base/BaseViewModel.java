@@ -35,4 +35,12 @@ public abstract class BaseViewModel extends ViewModel implements BaseViewModelCo
     public void showMessage(String message) {
         liveEvent.setValue(new ViewEvent(EventCode.BaseEvent.SHOW_MESSAGE, message));
     }
+
+    protected void sentViewEvent(final int eventCode){
+        sentViewEvent(new ViewEvent(eventCode));
+    }
+
+    protected void sentViewEvent(final ViewEvent viewEvent){
+        liveEvent.setValue(viewEvent);
+    }
 }

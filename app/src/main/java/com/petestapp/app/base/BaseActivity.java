@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.petestapp.app.constants.EventCode;
+import com.petestapp.app.model.ViewEvent;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -15,20 +16,22 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected void attachViewModel(BaseViewModel baseViewModel){
         if (baseViewModel == null) return;
-        baseViewModel.getLiveEvent().observe(this, viewEvent -> {
-            switch (viewEvent.getEventCode()){
-                case EventCode.BaseEvent.SHOW_ERROR:
-                case EventCode.BaseEvent.SHOW_MESSAGE:
-                    Toast.makeText(this, viewEvent.getMessageIfAny(), Toast.LENGTH_SHORT).show();
-                    break;
-                case EventCode.BaseEvent.SHOW_LOADER:
-                    Toast.makeText(this, "Showing loader", Toast.LENGTH_SHORT).show();
-                    break;
-                case EventCode.BaseEvent.HIDE_LOADER:
-                    Toast.makeText(this, "Hiding loader", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        });
+        baseViewModel.getLiveEvent().observe(this, this::handleViewEvent);
+    }
+
+    protected void handleViewEvent(final ViewEvent viewEvent){
+        switch (viewEvent.getEventCode()){
+            case EventCode.BaseEvent.SHOW_ERROR:
+            case EventCode.BaseEvent.SHOW_MESSAGE:
+                Toast.makeText(this, viewEvent.getMessageIfAny(), Toast.LENGTH_SHORT).show();
+                break;
+            case EventCode.BaseEvent.SHOW_LOADER:
+                Toast.makeText(this, "Showing loader", Toast.LENGTH_SHORT).show();
+                break;
+            case EventCode.BaseEvent.HIDE_LOADER:
+                Toast.makeText(this, "Hiding loader", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     protected ViewModelProvider getViewModel(){

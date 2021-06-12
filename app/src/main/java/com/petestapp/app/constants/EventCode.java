@@ -9,4 +9,8 @@ public interface EventCode {
         int SHOW_MESSAGE = 1004;
         // we can define basic event here which is needed my every view
     }
+
+    interface QuizView{
+        int SHOW_SCORE = 2001;
+    }
 }

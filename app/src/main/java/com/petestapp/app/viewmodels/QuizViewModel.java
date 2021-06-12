@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.petestapp.app.base.BaseApplication;
 import com.petestapp.app.base.BaseViewModel;
+import com.petestapp.app.constants.EventCode;
 import com.petestapp.app.model.QuizQuestion;
 import com.petestapp.app.util.AppUtils;
 
@@ -26,7 +27,8 @@ public class QuizViewModel extends BaseViewModel {
     private ArrayList<QuizQuestion> quizQuestions;
     private MutableLiveData<QuizQuestion> questionStream = new MutableLiveData<>();
     private int questionIndex = -1;
-    private int[] score;
+    private long[] score;
+    private long startTime;
 
 
     @Override
@@ -36,7 +38,7 @@ public class QuizViewModel extends BaseViewModel {
                     , "data.json");
             Type type = new TypeToken<ArrayList<QuizQuestion>>(){}.getType();
             quizQuestions = new Gson().fromJson(json, type);
-            score = new int[quizQuestions.size()];
+            score = new long[quizQuestions.size()];
         } catch (IOException e) {
             e.printStackTrace();
             showError("Something went wrong");
@@ -48,18 +50,29 @@ public class QuizViewModel extends BaseViewModel {
     }
 
     public void getNextQuestion(){
-        if (questionIndex == quizQuestions.size()){
-            //todo
+        if (questionIndex == quizQuestions.size() - 1){
+            sentViewEvent(EventCode.QuizView.SHOW_SCORE);
+            return;
         }
         questionIndex++;
         questionStream.postValue(quizQuestions.get(questionIndex));
+    }
+
+    public int getScore(){
+        return 89;
+    }
+
+    public void setStartTime(){
+        this.startTime = System.currentTimeMillis();
     }
 
     public void compareAnswer(String answer){
         boolean result = answer != null && answer.equals(quizQuestions
                 .get(questionIndex).getLogoName());
         if (result){
-           getNextQuestion();
+           long timeTaken = System.currentTimeMillis() - startTime;
+           score[questionIndex] = timeTaken;
+            getNextQuestion();
         }
     }
 

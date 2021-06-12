@@ -127,6 +127,7 @@ public class QuestionFragment extends BaseFragment implements KeyBoardAdapter.Ke
         binding.rvAnswer.setLayoutManager(new GridLayoutManager(getContext()
                 , 5));
         binding.rvAnswer.setAdapter(answerAdapter);
+        quizViewModel.setStartTime();
     }
 
     private void setKeyBoard(List<String> keys){
