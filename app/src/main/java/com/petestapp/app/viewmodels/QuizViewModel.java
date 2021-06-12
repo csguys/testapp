@@ -59,7 +59,11 @@ public class QuizViewModel extends BaseViewModel {
     }
 
     public int getScore(){
-        return 89;
+        long totalScore = 0;
+        for (long l : score) {
+            totalScore += l;
+        }
+        return (int) totalScore;
     }
 
     public void setStartTime(){
@@ -71,7 +75,7 @@ public class QuizViewModel extends BaseViewModel {
                 .get(questionIndex).getLogoName());
         if (result){
            long timeTaken = System.currentTimeMillis() - startTime;
-           score[questionIndex] = timeTaken;
+           score[questionIndex] = timeTaken / 1000;
             getNextQuestion();
         }
     }
