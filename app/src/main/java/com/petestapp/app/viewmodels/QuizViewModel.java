@@ -55,13 +55,12 @@ public class QuizViewModel extends BaseViewModel {
         questionStream.postValue(quizQuestions.get(questionIndex));
     }
 
-    public boolean compareAnswer(String answer){
+    public void compareAnswer(String answer){
         boolean result = answer != null && answer.equals(quizQuestions
                 .get(questionIndex).getLogoName());
         if (result){
-            //todo calculate score
+           getNextQuestion();
         }
-        return result;
     }
 
     public List<String> getKeyBoardChars(){

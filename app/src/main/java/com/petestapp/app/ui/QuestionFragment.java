@@ -116,6 +116,7 @@ public class QuestionFragment extends BaseFragment implements KeyBoardAdapter.Ke
 
     private void onImageLoaded(QuizQuestion question){
         answerTyped.clear();
+        answerCount = 0;
         answerTyped.addAll(Arrays.asList(new String[question.getLogoName().length()]));
         setKeyBoard(quizViewModel.getKeyBoardChars());
         if (answerAdapter != null){
@@ -158,16 +159,16 @@ public class QuestionFragment extends BaseFragment implements KeyBoardAdapter.Ke
 
     @Override
     public void onKeyClicker(int position) {
+        if (answerCount > answerTyped.size() - 1)return;
+        this.answerTyped.set(answerCount++, this.currentKeyBoard.get(position));
+        answerAdapter.notifyDataSetChanged();
         if (answerCount > answerTyped.size() - 1) {
             StringBuilder builder = new StringBuilder();
             for (String s : answerTyped) {
                 builder.append(s);
             }
             quizViewModel.compareAnswer(builder.toString());
-            return;
         }
-        this.answerTyped.set(answerCount++, this.currentKeyBoard.get(position));
-        answerAdapter.notifyDataSetChanged();
     }
 
     @Override
