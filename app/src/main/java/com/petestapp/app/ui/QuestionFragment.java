@@ -160,14 +160,19 @@ public class QuestionFragment extends BaseFragment implements KeyBoardAdapter.Ke
     @Override
     public void onKeyClicker(int position) {
         if (answerCount > answerTyped.size() - 1)return;
-        this.answerTyped.set(answerCount++, this.currentKeyBoard.get(position));
-        answerAdapter.notifyDataSetChanged();
-        if (answerCount > answerTyped.size() - 1) {
-            StringBuilder builder = new StringBuilder();
-            for (String s : answerTyped) {
-                builder.append(s);
+        String key = this.currentKeyBoard.get(position);
+        if (key != null && !key.isEmpty()){
+            this.answerTyped.set(answerCount++, this.currentKeyBoard.get(position));
+            answerAdapter.notifyDataSetChanged();
+            this.currentKeyBoard.set(position,"");
+            keyBoardAdapter.notifyItemChanged(position);
+            if (answerCount > answerTyped.size() - 1) {
+                StringBuilder builder = new StringBuilder();
+                for (String s : answerTyped) {
+                    builder.append(s);
+                }
+                quizViewModel.compareAnswer(builder.toString());
             }
-            quizViewModel.compareAnswer(builder.toString());
         }
     }
 
